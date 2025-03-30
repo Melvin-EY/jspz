@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Promotion - McLaren W1</title>
+    <style>
+        :root {
+            --primary-color: #ff6600;
+            --secondary-color: #333;
+            --text-light: #fff;
+            --background-light: #f5f5f5;
+            --accent-color: #1a1a1a;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--background-light);
+            color: var(--secondary-color);
+            line-height: 1.6;
+            transition: background 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .promo-section {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .slider {
+            position: relative;
+            max-width: 800px;
+            margin: 20px auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .slides img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .slides img.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-light);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-light);
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+        }
+
+        #prevBtn { left: 15px; }
+        #nextBtn { right: 15px; }
+
+        .slider-dots {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 8px;
+            background: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .dot:hover {
+            transform: scale(1.2);
+        }
+
+        .dot.active {
+            background: var(--primary-color);
+            transform: scale(1.2);
+        }
+
+        .specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .spec-item {
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .spec-item:hover {
+            transform: scale(1.05);
+            background: rgba(255, 102, 0, 0.1);
+        }
+
+        .testimonials {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .testimonial.active {
+            position: relative;
+            opacity: 1;
+        }
+
+        .cta {
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 30px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 30px 0;
+            transition: transform 0.3s;
+        }
+
+        .cta:hover {
+            transform: translateY(-5px);
+        }
+
+        .cta a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 12px 25px;
+            border: 2px solid var(--text-light);
+            border-radius: 5px;
+            display: inline-block;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .cta a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--secondary-color);
+            color: var(--text-light);
+        }
+
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 15px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            font-size: 1.5rem;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        #scrollTopBtn:hover {
+            opacity: 0.9;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .slider { 
+                max-width: 100%; 
+                height: 300px;
+            }
+            .slides img { height: 300px; }
+            .cta a { 
+                font-size: 1rem; 
+                padding: 10px 20px;
+            }
+            .caption { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>McLaren W1</h1>
+            <p>Experience the Future of Speed</p>
+            <h2>Made by Pyae Zay</h2>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="promo-section">
+            <h2>Featured Car: McLaren W1</h2>
+            <div class="slider">
+                <div class="slides">
+                    <img src="https://mclaren.scene7.com/is/image/mclaren/w1-front-three-quarter:crop-16x9?wid=1600&hei=900" class="active" alt="McLaren W1 Front">
+                    <img src="https://mclaren.scene7.com/is/image/mclaren/mclaren-w1-front%20seats-and-dashboard:crop-16x9?wid=1600&hei=900" alt="McLaren W1 Interior">
+                    <img src="https://mclaren.scene7.com/is/image/mclaren/mclaren-w1-orange-doors-open:crop-16x9?wid=1920&hei=1080" alt="McLaren W1 Doors Open">
+                </div>
+                <div class="caption" id="slideCaption">Front Three-Quarter View</div>
+                <button class="nav-btn" id="prevBtn">❮</button>
+                <button class="nav-btn" id="nextBtn">❯</button>
+            </div>
+            <div class="slider-dots" id="sliderDots"></div>
+
+            <div class="specs">
+                <div class="spec-item">
+                    <h3>Engine</h3>
+                    <p>V8 Hybrid</p>
+                </div>
+                <div class="spec-item">
+                    <h3>Horsepower</h3>
+                    <p>1000 HP</p>
+                </div>
+                <div class="spec-item">
+                    <h3>0-60 MPH</h3>
+                    <p>2.5 Seconds</p>
+                </div>
+                <div class="spec-item">
+                    <h3>Price</h3>
+                    <p>$2.1 Million</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div id="testimonialSlider">
+                <p class="testimonial active">"Unmatched performance and sleek design! Absolutely love my McLaren W1." - Alex T.</p>
+                <p class="testimonial">"The best driving experience of my life. Worth every penny!" - Maria K.</p>
+                <p class="testimonial">"A masterpiece of engineering. Pure driving bliss!" - James R.</p>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h2>Ready for a Test Drive?</h2>
+            <p>Feel the power of the McLaren W1 on the road.</p>
+            <a href="#contactForm" id="bookNow">Book Now</a>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2025 McLaren W1. All rights reserved.</p>
+    </footer>
+
+    <button id="scrollTopBtn">↑</button>
+
+    <script>
+
+        const slides = document.querySelectorAll('.slides img');
+        const dotsContainer = document.getElementById('sliderDots');
+        const caption = document.getElementById('slideCaption');
+        let currentSlide = 0;
+        const captions = [
+            "Front Three-Quarter View",
+            "Luxury Interior Design",
+            "Signature Butterfly Doors"
+        ];
+
+        slides.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            caption.textContent = captions[index];
+            caption.style.opacity = '0';
+            setTimeout(() => {
+                caption.style.transition = 'opacity 0.5s ease';
+                caption.style.opacity = '1';
+            }, 100);
+        }
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        });
+
+        let slideInterval = setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 5000);
+        const slider = document.querySelector('.slider');
+        slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
+        slider.addEventListener('mouseleave', () => {
+            slideInterval = setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }, 5000);
+        });
+       const testimonials = document.querySelectorAll('.testimonial');
+        let currentTestimonial = 0;
+
+        function showTestimonial(index) {
+            testimonials.forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+                t.style.opacity = i === index ? '1' : '0';
+            });
+        }
+     setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }, 4000);
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            scrollTopBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+
+        const cta = document.querySelector('.cta');
+        window.addEventListener('scroll', () => {
+            const rect = cta.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                cta.style.opacity = '1';
+                cta.style.transform = 'translateY(0)';
+            }
+        });
+
+        cta.style.opacity = '0';
+        cta.style.transform = 'translateY(50px)';
+        cta.style.transition = 'all 0.5s ease';
+        slides.forEach(img => {
+            img.setAttribute('loading', 'lazy');
+        });
+        const bookNow = document.getElementById('bookNow');
+        bookNow.addEventListener('click', (e) => {
+            e.preventDefault();
+            bookNow.textContent = 'Booking Request Sent!';
+            bookNow.style.background = 'rgba(255,255,255,0.3)';
+            setTimeout(() => {
+                bookNow.textContent = 'Book Now';
+                bookNow.style.background = 'none';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
